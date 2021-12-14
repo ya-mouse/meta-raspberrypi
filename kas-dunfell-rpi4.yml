@@ -1,0 +1,100 @@
+header:
+  version: 8
+
+machine: raspberrypi4-64
+distro: poky
+target:
+  - core-image-base
+
+repos:
+  meta-raspberry:
+
+  poky:
+    url: https://git.yoctoproject.org/git/poky
+    refspec: dunfell
+    layers:
+      meta:
+      meta-poky:
+      meta-yocto-bsp:
+
+  meta-openembedded:
+    url: http://git.openembedded.org/meta-openembedded
+    refspec: dunfell
+    layers:
+      meta-oe:
+      meta-python:
+      meta-networking:
+      meta-perl:
+
+  meta-qt5:
+    url: https://github.com/meta-qt5/meta-qt5/
+    refspec: dunfell
+
+  # TotalCross Layer and dependencies
+  meta-totalcross:
+    url: https://github.com/ya-mouse/meta-totalcross/
+    refspec: dunfell-custom
+
+  meta-browser:
+    url: https://github.com/OSSystems/meta-browser/
+    refspec: master
+    layers:
+      meta-chromium:
+
+  meta-clang:
+    url: https://github.com/kraj/meta-clang/
+    refspec: dunfell
+
+  meta-java:
+    url: https://github.com/ya-mouse/meta-java/
+    refspec: dunfell-custom
+
+  meta-python2:
+    url: http://git.openembedded.org/meta-python2/
+    refspec: dunfell
+
+bblayers_conf_header:
+  standard: |
+    POKY_BBLAYERS_CONF_VERSION = "2"
+    BBPATH = "${TOPDIR}"
+    BBFILES ?= ""
+local_conf_header:
+  reduce_diskspace: |
+    INHERIT += "rm_work_and_downloads"
+  standard: |
+    CONF_VERSION = "1"
+    PACKAGE_CLASSES = "package_rpm"
+    SDKMACHINE = "x86_64"
+    USER_CLASSES = "buildstats image-mklibs image-prelink"
+    PATCHRESOLVE = "noop"
+  debug-tweaks: |
+    EXTRA_IMAGE_FEATURES_append = " debug-tweaks"
+  image-features: |
+    EXTRA_IMAGE_FEATURES_append = " ssh-server-openssh"
+    EXTRA_IMAGE_FEATURES_append = " x11-base"
+  image-packages: |
+    IMAGE_INSTALL_append = " totalcross-sample-bad-apple"
+    IMAGE_INSTALL_append = " python3 rpio rpi-gpio python3-python-can strace"
+    IMAGE_INSTALL_append = " packagegroup-core-x11-base xserver-xorg"
+#    IMAGE_INSTALL_append = " packagegroup-core-x11-base tigervnc"
+  distro-features: |
+    DISTRO_FEATURES_append = " opengl x11"
+    DISTRO_FEATURES_remove = "bluetooth"
+  config-options: |
+    ENABLE_SPI_BUS = "1"
+    ENABLE_DUAL_CAN = "1"
+    DISABLE_OVERSCAN = "1"
+    RPI_EXTRA_CONFIG = '\n\
+    dtoverlay=disable-bt\n\
+    '
+    # MACHINE_FEATURES += "pitft <modelname>"
+  diskmon: |
+    BB_DISKMON_DIRS = "\
+        STOPTASKS,${TMPDIR},1G,100K \
+        STOPTASKS,${DL_DIR},1G,100K \
+        STOPTASKS,${SSTATE_DIR},1G,100K \
+        STOPTASKS,/tmp,100M,100K \
+        ABORT,${TMPDIR},100M,1K \
+        ABORT,${DL_DIR},100M,1K \
+        ABORT,${SSTATE_DIR},100M,1K \
+        ABORT,/tmp,10M,1K"
