@@ -61,6 +61,8 @@ bblayers_conf_header:
 local_conf_header:
   reduce_diskspace: |
     INHERIT += "rm_work_and_downloads"
+  keep-work-dir: |
+    RM_WORK_EXCLUDE = "totalcross-launcher"
   standard: |
     CONF_VERSION = "1"
     PACKAGE_CLASSES = "package_rpm"
