@@ -62,7 +62,7 @@ local_conf_header:
   reduce_diskspace: |
     INHERIT += "rm_work_and_downloads"
   keep-work-dir: |
-    RM_WORK_EXCLUDE = "totalcross-launcher"
+    RM_WORK_EXCLUDE = "totalcross-launcher totalcross-vm totalcross-vm-core"
   standard: |
     CONF_VERSION = "1"
     PACKAGE_CLASSES = "package_rpm"
@@ -78,11 +78,13 @@ local_conf_header:
     IMAGE_INSTALL_append = " totalcross-sample-bad-apple"
     IMAGE_INSTALL_append = " python3 rpio rpi-gpio python3-python-can strace"
     IMAGE_INSTALL_append = " packagegroup-core-x11-base xserver-xorg"
+    IMAGE_INSTALL_append = " mesa-demos"
 #    IMAGE_INSTALL_append = " packagegroup-core-x11-base tigervnc"
   distro-features: |
     DISTRO_FEATURES_append = " opengl x11"
-    DISTRO_FEATURES_remove = "bluetooth"
+    DISTRO_FEATURES_remove = "bluetooth wayland vulkan"
   config-options: |
+    GPU_MEM_256 = "1"
     ENABLE_SPI_BUS = "1"
     ENABLE_DUAL_CAN = "1"
     DISABLE_OVERSCAN = "1"
