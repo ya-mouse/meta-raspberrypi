@@ -73,16 +73,13 @@ local_conf_header:
     EXTRA_IMAGE_FEATURES_append = " debug-tweaks"
   image-features: |
     EXTRA_IMAGE_FEATURES_append = " ssh-server-openssh"
-    EXTRA_IMAGE_FEATURES_append = " x11-base"
   image-packages: |
     IMAGE_INSTALL_append = " totalcross-sample-bad-apple"
     IMAGE_INSTALL_append = " python3 rpio rpi-gpio python3-python-can strace"
-    IMAGE_INSTALL_append = " packagegroup-core-x11-base xserver-xorg"
-    IMAGE_INSTALL_append = " mesa-demos kmscube"
-#    IMAGE_INSTALL_append = " packagegroup-core-x11-base tigervnc"
+    IMAGE_INSTALL_append = " kmscube"
   distro-features: |
-    DISTRO_FEATURES_append = " opengl x11"
-    DISTRO_FEATURES_remove = "bluetooth wayland vulkan"
+    DISTRO_FEATURES_append = " opengl"
+    DISTRO_FEATURES_remove = "bluetooth wayland vulkan x11"
   config-options: |
     GPU_MEM_256 = "1"
     ENABLE_SPI_BUS = "1"
@@ -92,7 +89,6 @@ local_conf_header:
     dtoverlay=disable-bt\n\
     max_framebuffers=2\n\
     '
-    # MACHINE_FEATURES += "pitft <modelname>"
   diskmon: |
     BB_DISKMON_DIRS = "\
         STOPTASKS,${TMPDIR},1G,100K \
