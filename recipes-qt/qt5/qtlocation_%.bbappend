@@ -1,0 +1,1 @@
+PACKAGECONFIG = "geoservices_osm"
