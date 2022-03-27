@@ -44,7 +44,6 @@ EOF
     done
     cat <<EOF>${D}${sysconfdir}/init.d/powertune
 #!/bin/sh
-cd /opt/PowertuneQMLGui
 export LC_ALL=en_US.utf8
 export QT_QPA_EGLFS_PHYSICAL_WIDTH=155
 export QT_QPA_EGLFS_PHYSICAL_HEIGHT=86
@@ -55,13 +54,19 @@ export QT_QPA_PLATFORM=eglfs
 
 /home/pi/powertune-update.sh ||:
 
-./PowertuneQMLGui &
+(cd /opt/PowertuneQMLGui; ./PowertuneQMLGui) &
+
+# Allow QT5 have more IOPS to load all lib/plugins while starting in background
+sleep 1.5
 
 /home/pi/startdaemon.sh
+
+# Wait a bit before processing next init script
+sleep 1
 EOF
     chmod 0755 ${D}${sysconfdir}/init.d/powertune
-    ln -s ../init.d/powertune ${D}${sysconfdir}/rc3.d/S02powertune
-    ln -s ../init.d/powertune ${D}${sysconfdir}/rc5.d/S02powertune
+    ln -s ../init.d/powertune ${D}${sysconfdir}/rc3.d/S010powertune
+    ln -s ../init.d/powertune ${D}${sysconfdir}/rc5.d/S010powertune
 }
 
 FILES:${PN} += "/opt/PowertuneQMLGui /home/pi/daemons"
