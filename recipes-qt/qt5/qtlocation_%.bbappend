@@ -1,1 +1,1 @@
-PACKAGECONFIG = "geoservices_osm"
+PACKAGECONFIG = "geoservices_osm geoservices_itemsoverlay"
