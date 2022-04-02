@@ -55,7 +55,7 @@ local_conf_header:
     IMAGE_INSTALL_append = " locale-base-de-de glibc-binary-localedata-de-de glibc-charmap-utf-8"
     IMAGE_INSTALL_append = " can-utils powertune"
     IMAGE_INSTALL_append = " kmscube qtbase-dev qtbase-tools qtbase-plugins qtbase-mkspecs"
-    IMAGE_INSTALL_append = " qtserialbus-dev qtcharts-dev qtlocation-dev qtsensors-dev qtmultimedia-dev qtquickcontrols2-dev qtvirtualkeyboard-dev qtsvg-dev qtxmlpatterns-dev icu-dev"
+    IMAGE_INSTALL_append = " qtserialbus-dev qtcharts-dev qtlocation-dev qtsensors-dev qtmultimedia-dev qtquickcontrols2-dev qtvirtualkeyboard-dev qtsvg-dev qtxmlpatterns-dev icu-dev libsocketcan-dev"
     IMAGE_INSTALL_append = " binutils cpp cpp-symlinks g++ g++-symlinks gcc gcc-symlinks gcc-dev"
   distro-features: |
     DISTRO_FEATURES_append = " opengl"
