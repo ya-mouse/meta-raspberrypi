@@ -8,25 +8,32 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=84dcc94da3adb52b53ae4fa38fe49e5d"
 
 DEPENDS = "qtbase qttools"
 DEPENDS += " qtserialbus qtcharts qtlocation qtsensors qtmultimedia qtquickcontrols2 qtdeclarative qtgraphicaleffects qtsvg"
-RDEPENDS_${PN} += " sudo qtvirtualkeyboard qtsvg-plugins qtxmlpatterns qtdeclarative-qmlplugins qtgraphicaleffects-qmlplugins qtquickcontrols-qmlplugins qtlocation-qmlplugins qtsensors-qmlplugins qtbase-qmlplugins qtbase-plugins libsocketcan"
+RDEPENDS:${PN} += " sudo qtvirtualkeyboard qtsvg-plugins qtxmlpatterns qtdeclarative-qmlplugins qtgraphicaleffects-qmlplugins qtquickcontrols-qmlplugins qtlocation-qmlplugins qtsensors-qmlplugins qtbase-qmlplugins qtbase-plugins libsocketcan"
 
 inherit qmake5
 inherit useradd
 
-SRCREV = "f2a6d8d9ecc7c10cb407916240001307595dd700"
-SRC_URI = "git://github.com/BastianGschrey/PowerTune;protocol=https"
+SRCREV = "${AUTOREV}"
+SRC_URI = " \
+    git://github.com/BastianGschrey/PowerTune;protocol=https;branch=master \
+    file://powertune-update.sh \
+    file://startdaemon.sh \
+    "
 
 S = "${WORKDIR}/git"
 
 USERADD_PACKAGES = "${PN}"
 
-USERADD_PARAM:${PN} = "-d /home/pi -s /bin/bash -P 'powertune' pi"
+# powertune
+USERADD_PARAM:${PN} = "-d /home/pi -s /bin/bash -p '$6$u30tO9Iobu19Ak6p$40C6YgGQOhUNCgDx6bQMskQcrIlSzRugqENWCaqLXAOrjV2TKTFtRYWQPXPWOBjsRE/7xMMeagqK5fceZstO81' pi"
 
-do_install_append() {
+do_install:append() {
     install -m 0755 -pD ${S}/daemons/EMUCANd ${D}/home/pi/daemons/EMUCANd
+    install -m 0755 -p ${WORKDIR}/powertune-update.sh ${D}/home/pi/powertune-update.sh
+    install -m 0755 -p ${WORKDIR}/startdaemon.sh ${D}/home/pi/startdaemon.sh
 
     for d in GPSTracks Gauges KTracks Logo Sounds exampleDash fonts graphics; do \
-        cp -rd ${S}/$d/ ${D}/opt/PowertuneQMLGui/
+        cp -rd ${S}/$d/ ${D}/opt/PowerTune/
     done
 
     # Add sudoers config
@@ -35,8 +42,8 @@ do_install_append() {
 pi ALL=(ALL) ALL
 EOF
 
-    mv ${D}/opt/PowertuneQMLGui/bin/PowertuneQMLGui \
-       ${D}/opt/PowertuneQMLGui/PowertuneQMLGui
+    mv ${D}/opt/PowerTune/PowertuneQMLGui \
+       ${D}/opt/PowerTune/Powertune
 
     # Install InitV scripts
     for d in init.d rc3.d rc5.d; do \
@@ -54,7 +61,7 @@ export QT_QPA_PLATFORM=eglfs
 
 /home/pi/powertune-update.sh ||:
 
-(cd /opt/PowertuneQMLGui; ./PowertuneQMLGui) &
+(cd /opt/PowerTune; ./Powertune) &
 
 # Allow QT5 have more IOPS to load all lib/plugins while starting in background
 sleep 1.5
@@ -69,4 +76,4 @@ EOF
     ln -s ../init.d/powertune ${D}${sysconfdir}/rc5.d/S010powertune
 }
 
-FILES:${PN} += "/opt/PowertuneQMLGui /home/pi/daemons"
+FILES:${PN} += "/opt/PowerTune /home/pi/daemons /home/pi/*.sh"
