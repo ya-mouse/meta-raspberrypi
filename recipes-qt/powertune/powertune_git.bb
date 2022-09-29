@@ -1,6 +1,6 @@
 SUMMARY = "PowerTune is a Modern Gauge Display"
 SECTION = "libs"
-HOMEPAGE = "https://github.com/BastianGschrey/PowerTune"
+HOMEPAGE = "https://github.com/PowerTuneDigital/PowerTuneDigitalOfficial"
 
 # GPLv3
 LICENSE = "GPLv3"
@@ -15,7 +15,7 @@ inherit useradd
 
 SRCREV = "${AUTOREV}"
 SRC_URI = " \
-    git://github.com/BastianGschrey/PowerTune;protocol=https;branch=master \
+    https://github.com/PowerTuneDigital/PowerTuneDigitalOfficial.git \
     file://powertune-update.sh \
     file://startdaemon.sh \
     "
