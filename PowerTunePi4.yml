@@ -65,7 +65,7 @@ local_conf_header:
     DISTRO_FEATURES:append = " opengl"
     DISTRO_FEATURES:remove = "bluetooth wayland vulkan x11"
   locale: |
-    IMAGE_LINGUAS = "de-de en-us"
+    IMAGE_LINGUAS = "ja-jp de-de en-us"
 #    GLIBC_GENERATE_LOCALES = "de_DE.UTF-8 en_US.UTF-8 en_GB.UTF-8"
   config-options: |
     GPU_MEM_256 = "1"
