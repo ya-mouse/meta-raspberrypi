@@ -1,2 +1,2 @@
 PACKAGECONFIG_DISTRO = "icu"
-PACKAGECONFIG_append = "gif"
+PACKAGECONFIG:append = "gif"

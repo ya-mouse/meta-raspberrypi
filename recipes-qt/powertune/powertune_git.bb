@@ -15,9 +15,10 @@ inherit useradd
 
 SRCREV = "${AUTOREV}"
 SRC_URI = " \
-    https://github.com/PowerTuneDigital/PowerTuneDigitalOfficial.git \
+    git://github.com/PowerTuneDigital/PowerTuneDigitalOfficial;protocol=https;branch=main \
     file://powertune-update.sh \
     file://startdaemon.sh \
+    file://updatePowerTune.sh \
     "
 
 S = "${WORKDIR}/git"
@@ -31,9 +32,9 @@ do_install:append() {
     install -m 0755 -pD ${S}/daemons/EMUCANd ${D}/home/pi/daemons/EMUCANd
     install -m 0755 -p ${WORKDIR}/powertune-update.sh ${D}/home/pi/powertune-update.sh
     install -m 0755 -p ${WORKDIR}/startdaemon.sh ${D}/home/pi/startdaemon.sh
-
+    install -m 0755 -p ${WORKDIR}/updatePowerTune.sh ${D}/home/pi/updatePowerTune.sh
     for d in GPSTracks Gauges KTracks Logo Sounds exampleDash fonts graphics; do \
-        cp -rd ${S}/$d/ ${D}/opt/PowerTune/
+       cp -rd ${S}/$d/ ${D}/opt/PowerTune/
     done
 
     # Add sudoers config
@@ -44,7 +45,7 @@ EOF
 
     mv ${D}/opt/PowerTune/PowertuneQMLGui \
        ${D}/opt/PowerTune/Powertune
-
+       
     # Install InitV scripts
     for d in init.d rc3.d rc5.d; do \
         install -dm 0755 ${D}${sysconfdir}/${d}; \
@@ -61,15 +62,10 @@ export QT_QPA_PLATFORM=eglfs
 
 /home/pi/powertune-update.sh ||:
 
+/home/pi/startdaemon.sh &
+
 (cd /opt/PowerTune; ./Powertune) &
 
-# Allow QT5 have more IOPS to load all lib/plugins while starting in background
-sleep 1.5
-
-/home/pi/startdaemon.sh
-
-# Wait a bit before processing next init script
-sleep 1
 EOF
     chmod 0755 ${D}${sysconfdir}/init.d/powertune
     ln -s ../init.d/powertune ${D}${sysconfdir}/rc3.d/S010powertune

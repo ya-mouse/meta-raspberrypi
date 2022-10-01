@@ -22,7 +22,7 @@ repos:
     url: http://git.openembedded.org/meta-openembedded
     path: layers/meta-openembedded
     # This should be changed to "kirkstone" once released
-    refspec: master
+    refspec: kirkstone
     layers:
       meta-oe:
       meta-python:
@@ -59,23 +59,24 @@ local_conf_header:
     IMAGE_INSTALL:append = " locale-base-de-de glibc-binary-localedata-de-de glibc-charmap-utf-8"
     IMAGE_INSTALL:append = " can-utils powertune"
     IMAGE_INSTALL:append = " kmscube qtbase-dev qtbase-tools qtbase-plugins qtbase-mkspecs"
-    IMAGE_INSTALL:append = " qtserialbus-dev qtcharts-dev qtlocation-dev qtsensors-dev qtmultimedia-dev qtquickcontrols2-dev qtvirtualkeyboard-dev qtsvg-dev qtxmlpatterns-dev icu-dev libsocketcan-dev"
     IMAGE_INSTALL:append = " binutils cpp cpp-symlinks g++ g++-symlinks gcc gcc-symlinks gcc-dev"
+    IMAGE_INSTALL:append = " qtmultimedia qtmultimedia-plugins qtmultimedia-qmlplugins qtserialbus-dev qtcharts-dev qtlocation-dev qtsensors-dev qtmultimedia-dev qtquickcontrols2-dev qtvirtualkeyboard-dev qtsvg-dev qtxmlpatterns-dev icu-dev libsocketcan-dev dbus pulseaudio-misc pulseaudio-module-dbus-protocol alsa-utils"
+    
   distro-features: |
-    DISTRO_FEATURES:append = " opengl"
+    DISTRO_FEATURES:append = " opengl pulseaudio dbus"
     DISTRO_FEATURES:remove = "bluetooth wayland vulkan x11"
   locale: |
     IMAGE_LINGUAS = "ja-jp de-de en-us"
 #    GLIBC_GENERATE_LOCALES = "de_DE.UTF-8 en_US.UTF-8 en_GB.UTF-8"
   config-options: |
-    GPU_MEM_256 = "1"
+    GPU_MEM = "1024"
     ENABLE_SPI_BUS = "1"
     ENABLE_CAN = "1"
     BOOT_DELAY = "0"
     DISABLE_SPLASH = "1"
     DISABLE_OVERSCAN = "1"
     DISABLE_RPI_BOOT_LOGO = "1"
-    CMDLINE_DEBUG = "quiet silent"
+    CMDLINE_DEBUG = "loglevel=0 console=tty3 quiet silent"
     RPI_KERNEL_DEVICETREE_OVERLAYS:append = " overlays/rpi-backlight.dtbo" 
     RPI_EXTRA_CONFIG = '\n\
     initial_turbo=20\n\
