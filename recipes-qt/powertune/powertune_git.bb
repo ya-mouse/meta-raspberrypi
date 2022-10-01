@@ -43,9 +43,6 @@ do_install:append() {
 pi ALL=(ALL) ALL
 EOF
 
-    mv ${D}/opt/PowerTune/PowertuneQMLGui \
-       ${D}/opt/PowerTune/Powertune
-       
     # Install InitV scripts
     for d in init.d rc3.d rc5.d; do \
         install -dm 0755 ${D}${sysconfdir}/${d}; \
@@ -64,7 +61,7 @@ export QT_QPA_PLATFORM=eglfs
 
 /home/pi/startdaemon.sh &
 
-(cd /opt/PowerTune; ./Powertune) &
+(cd /opt/PowerTune; ./PowertuneQMLGui) &
 
 EOF
     chmod 0755 ${D}${sysconfdir}/init.d/powertune

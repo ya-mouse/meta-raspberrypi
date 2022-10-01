@@ -54,16 +54,17 @@ local_conf_header:
     EXTRA_IMAGE_FEATURES:append = " ssh-server-openssh"
   image-packages: |
     IMAGE_FEATURES:remove = " splash"
+    IMAGE_INSTALL:append = " gstreamer1.0  gstreamer1.0-meta-base gstreamer1.0-plugins-base gstreamer1.0-plugins-good"
     IMAGE_INSTALL:append = " rpio rpi-gpio strace nano openssh-ssh git"
     IMAGE_INSTALL:append = " rsync iw sudo htop ntp wpa-supplicant"
     IMAGE_INSTALL:append = " locale-base-de-de glibc-binary-localedata-de-de glibc-charmap-utf-8"
     IMAGE_INSTALL:append = " can-utils powertune"
     IMAGE_INSTALL:append = " kmscube qtbase-dev qtbase-tools qtbase-plugins qtbase-mkspecs"
     IMAGE_INSTALL:append = " binutils cpp cpp-symlinks g++ g++-symlinks gcc gcc-symlinks gcc-dev"
-    IMAGE_INSTALL:append = " qtmultimedia qtmultimedia-plugins qtmultimedia-qmlplugins qtserialbus-dev qtcharts-dev qtlocation-dev qtsensors-dev qtmultimedia-dev qtquickcontrols2-dev qtvirtualkeyboard-dev qtsvg-dev qtxmlpatterns-dev icu-dev libsocketcan-dev dbus pulseaudio-misc pulseaudio-module-dbus-protocol alsa-utils"
-    
+    IMAGE_INSTALL:append = " qtmultimedia qtmultimedia-plugins qtmultimedia-qmlplugins qtserialbus-dev qtcharts-dev qtlocation-dev qtsensors-dev qtmultimedia-dev qtquickcontrols2-dev qtvirtualkeyboard-dev qtsvg-dev qtxmlpatterns-dev icu-dev libsocketcan-dev  pulseaudio-server pulseaudio-misc pulseaudio-module-dbus-protoco dbus alsa-utils"
+        
   distro-features: |
-    DISTRO_FEATURES:append = " opengl pulseaudio dbus"
+    DISTRO_FEATURES:append = " opengl pulseaudio dbus systemd"
     DISTRO_FEATURES:remove = "bluetooth wayland vulkan x11"
   locale: |
     IMAGE_LINGUAS = "ja-jp de-de en-us"
