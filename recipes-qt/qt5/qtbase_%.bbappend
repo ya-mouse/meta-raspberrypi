@@ -1,2 +1,3 @@
 PACKAGECONFIG_DISTRO = "icu"
 PACKAGECONFIG:append = "gif"
+OPENSSL_LINKING_MODE = "-linked"
