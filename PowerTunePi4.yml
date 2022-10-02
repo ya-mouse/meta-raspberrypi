@@ -65,6 +65,7 @@ local_conf_header:
     IMAGE_INSTALL:append = " libsocketcan-dev"
     IMAGE_INSTALL:append = " kmscube qtbase-dev qtbase-tools qtbase-plugins qtbase-mkspecs"
     
+    
   distro-features: |
     DISTRO_FEATURES:append = " opengl "
     DISTRO_FEATURES:remove = "bluetooth wayland vulkan x11"
