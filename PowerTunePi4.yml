@@ -32,7 +32,7 @@ repos:
   meta-qt5:
     url: https://github.com/meta-qt5/meta-qt5/
     path: layers/meta-qt5
-    refspec: jansa/kirkstone
+    refspec: kirkstone
 
 bblayers_conf_header:
   standard: |
@@ -76,11 +76,13 @@ local_conf_header:
   config-options: |
     GPU_MEM = "1024"
     ENABLE_SPI_BUS = "1"
+    ENABLE_I2C = "1"
     ENABLE_CAN = "1"
     BOOT_DELAY = "0"
     DISABLE_SPLASH = "1"
     DISABLE_OVERSCAN = "1"
     DISABLE_RPI_BOOT_LOGO = "1"
+    KERNEL_MODULE_AUTOLOAD_rpi += " i2c-dev i2c-bcm2708"
     CMDLINE_DEBUG = "loglevel=0 console=tty3 quiet silent"
     RPI_KERNEL_DEVICETREE_OVERLAYS:append = " overlays/rpi-backlight.dtbo" 
     RPI_EXTRA_CONFIG = '\n\
