@@ -5,6 +5,6 @@ update_config=1
 country=ZA
 # Primary WIFI
 network={
-  ssid="My Network"
-  psk="mypsk"
+  ssid="Asus24"
+  psk="cleanupyourroom"
 }

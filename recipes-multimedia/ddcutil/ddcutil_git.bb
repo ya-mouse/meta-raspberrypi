@@ -1,10 +1,10 @@
-UMMARY = "Tool to modify display settings by ddc (hdmi)"
+SUMMARY = "Tool to modify display settings by ddc (hdmi)"
 HOMEPAGE = "http://www.ddcutil.com"
 AUTHOR = "Sanford Rockowitz  "
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
-BRANCH = "master"
+BRANCH = "2.1.3-release"
 
 SRCREV = "5080161b456cc6a1fd3e6db3dc537e1dcd1c809b"
 

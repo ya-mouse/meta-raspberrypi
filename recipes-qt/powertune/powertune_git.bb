@@ -50,6 +50,9 @@ EOF
     done
     cat <<EOF>${D}${sysconfdir}/init.d/powertune
 #!/bin/sh
+#load i2c-dev for ddcutil
+modprobe i2c-dev
+#export Enviroment variables
 export LC_ALL=en_US.utf8
 export QT_QPA_EGLFS_PHYSICAL_WIDTH=155
 export QT_QPA_EGLFS_PHYSICAL_HEIGHT=86
