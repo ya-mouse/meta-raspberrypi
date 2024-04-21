@@ -1,0 +1,102 @@
+header:
+  version: 8
+
+machine: raspberrypi5
+distro: poky
+target:
+  - core-image-base
+
+repos:
+  meta-raspberry:
+
+  poky:
+    url: https://git.yoctoproject.org/git/poky
+    path: layers/poky
+    refspec: kirkstone
+    layers:
+      meta:
+      meta-poky:
+      meta-yocto-bsp:
+
+  meta-openembedded:
+    url: http://git.openembedded.org/meta-openembedded
+    path: layers/meta-openembedded
+    # This should be changed to "kirkstone" once released
+    refspec: kirkstone
+    layers:
+      meta-oe:
+      meta-python:
+      meta-networking:
+      meta-perl:
+
+  meta-qt5:
+    url: https://github.com/meta-qt5/meta-qt5/
+    path: layers/meta-qt5
+    refspec: kirkstone
+
+bblayers_conf_header:
+  standard: |
+    POKY_BBLAYERS_CONF_VERSION = "2"
+    BBPATH = "${TOPDIR}"
+    BBFILES ?= ""
+local_conf_header:
+  reduce_diskspace: |
+    INHERIT += "rm_work_and_downloads"
+  standard: |
+    CONF_VERSION = "2"
+    PACKAGE_CLASSES = "package_rpm"
+    SDKMACHINE = "x86_64"
+    USER_CLASSES = "buildstats"
+    PATCHRESOLVE = "noop"
+  debug-tweaks: |
+    EXTRA_IMAGE_FEATURES:append = " debug-tweaks"
+  image-features: |
+    EXTRA_IMAGE_FEATURES:append = " ssh-server-openssh"
+  image-packages: |
+    IMAGE_FEATURES:remove = " splash"
+    IMAGE_INSTALL:append = " rpio rpi-gpio strace nano openssh-ssh git openssl openssl-bin ddcutil"
+    IMAGE_INSTALL:append = " rsync iw sudo htop ntp wpa-supplicant"
+    IMAGE_INSTALL:append = " locale-base-de-de glibc-binary-localedata-de-de glibc-charmap-utf-8"
+    IMAGE_INSTALL:append = " can-utils powertune"
+    IMAGE_INSTALL:append = " binutils cpp cpp-symlinks g++ g++-symlinks gcc gcc-symlinks gcc-dev"
+    IMAGE_INSTALL:append = " qtmultimedia qtmultimedia-plugins qtmultimedia-qmlplugins qtserialbus-dev qtcharts-dev qtlocation-dev qtsensors-dev qtmultimedia-dev"
+    IMAGE_INSTALL:append = " qtquickcontrols2-dev qtvirtualkeyboard-dev qtsvg-dev qtxmlpatterns-dev icu-dev"
+    IMAGE_INSTALL:append = " libsocketcan-dev"
+    IMAGE_INSTALL:append = " kmscube qtbase-dev qtbase-tools qtbase-plugins qtbase-mkspecs"
+    IMAGE_INSTALL:append = " alsa-lib alsa-utils alsa-tools pulseaudio-server pulseaudio-misc pulseaudio-module-dbus-protocol "
+    IMAGE_INSTALL:append = " gstreamer1.0  gstreamer1.0-meta-base gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad"
+    PACKAGECONFIG:append:pn-qtmultimedia = " pulseaudio gstreamer alsa"
+     
+  distro-features: |
+    DISTRO_FEATURES:append = " opengl pulseaudio"
+    DISTRO_FEATURES:remove = "bluetooth wayland vulkan x11 python"
+  locale: |
+    IMAGE_LINGUAS = "ja-jp de-de en-us"
+#    GLIBC_GENERATE_LOCALES = "de_DE.UTF-8 en_US.UTF-8 en_GB.UTF-8"
+  config-options: |
+    GPU_MEM = "1024"
+    ENABLE_SPI_BUS = "1"
+    ENABLE_I2C = "1"
+    ENABLE_CAN = "1"
+    BOOT_DELAY = "0"
+    DISABLE_SPLASH = "1"
+    DISABLE_OVERSCAN = "1"
+    DISABLE_RPI_BOOT_LOGO = "1"
+    KERNEL_MODULE_AUTOLOAD:rpi += "i2c-dev i2c-bcm2708"
+    CMDLINE_DEBUG = "loglevel=0 console=tty3 quiet silent"
+    RPI_KERNEL_DEVICETREE_OVERLAYS:append = " overlays/rpi-backlight.dtbo" 
+    RPI_EXTRA_CONFIG = '\n\
+    initial_turbo=20\n\
+    dtoverlay=disable-bt\n\
+    max_framebuffers=2\n\
+    '
+  diskmon: |
+    BB_DISKMON_DIRS = "\
+        STOPTASKS,${TMPDIR},1G,100K \
+        STOPTASKS,${DL_DIR},1G,100K \
+        STOPTASKS,${SSTATE_DIR},1G,100K \
+        STOPTASKS,/tmp,100M,100K \
+        HALT,${TMPDIR},100M,1K \
+        HALT,${DL_DIR},100M,1K \
+        HALT,${SSTATE_DIR},100M,1K \
+        HALT,/tmp,10M,1K"

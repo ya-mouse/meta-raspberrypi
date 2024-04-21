@@ -6,12 +6,12 @@ SRC_URI:append:rpi = " \
 
 SRC_URI:append:rpi = " file://0001-rpi-always-set-fdt_addr-with-firmware-provided-FDT-address.patch"
 
-# special fix for raspberrypi-cm3
-SRC_URI:append:raspberrypi-cm3 = " file://0001-dm-core-Move-ofdata_to_platdata-call-earlier.patch"
-
 DEPENDS:append:rpi = " u-boot-default-script"
 
 do_install:append:rpi () {
     install -d ${D}${sysconfdir}
     install -m 0644 ${WORKDIR}/fw_env.config ${D}${sysconfdir}/fw_env.config
 }
+
+# Temporary avoid Raspberry Pi 5 because U-Boot has not been ported yet
+COMPATIBLE_MACHINE:raspberrypi5 = "(-)"
