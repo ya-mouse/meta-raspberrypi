@@ -1,6 +1,6 @@
 SUMMARY = "PowerTune is a Modern Gauge Display"
 SECTION = "libs"
-HOMEPAGE = "https://github.com/BastianGschrey/PowerTune"
+HOMEPAGE = "https://github.com/PowerTuneDigital/PowerTuneDigitalOfficial"
 
 # GPLv3
 LICENSE = "GPLv3"
@@ -15,9 +15,10 @@ inherit useradd
 
 SRCREV = "${AUTOREV}"
 SRC_URI = " \
-    git://github.com/BastianGschrey/PowerTune;protocol=https;branch=master \
+    git://github.com/PowerTuneDigital/PowerTuneDigitalOfficial;protocol=https;branch=main \
     file://powertune-update.sh \
     file://startdaemon.sh \
+    file://updatePowerTune.sh \
     "
 
 S = "${WORKDIR}/git"
@@ -28,12 +29,13 @@ USERADD_PACKAGES = "${PN}"
 USERADD_PARAM:${PN} = "-d /home/pi -s /bin/bash -p '$6$u30tO9Iobu19Ak6p$40C6YgGQOhUNCgDx6bQMskQcrIlSzRugqENWCaqLXAOrjV2TKTFtRYWQPXPWOBjsRE/7xMMeagqK5fceZstO81' pi"
 
 do_install:append() {
-    install -m 0755 -pD ${S}/daemons/EMUCANd ${D}/home/pi/daemons/EMUCANd
+    install -d ${D}/home/pi
+    install -d ${D}/opt/PowerTune
     install -m 0755 -p ${WORKDIR}/powertune-update.sh ${D}/home/pi/powertune-update.sh
     install -m 0755 -p ${WORKDIR}/startdaemon.sh ${D}/home/pi/startdaemon.sh
-
+    install -m 0755 -p ${WORKDIR}/updatePowerTune.sh ${D}/home/pi/updatePowerTune.sh
     for d in GPSTracks Gauges KTracks Logo Sounds exampleDash fonts graphics; do \
-        cp -rd ${S}/$d/ ${D}/opt/PowerTune/
+       cp -rd ${S}/$d/ ${D}/opt/PowerTune/
     done
 
     # Add sudoers config
@@ -42,34 +44,29 @@ do_install:append() {
 pi ALL=(ALL) ALL
 EOF
 
-    mv ${D}/opt/PowerTune/PowertuneQMLGui \
-       ${D}/opt/PowerTune/Powertune
-
     # Install InitV scripts
     for d in init.d rc3.d rc5.d; do \
         install -dm 0755 ${D}${sysconfdir}/${d}; \
     done
     cat <<EOF>${D}${sysconfdir}/init.d/powertune
 #!/bin/sh
+#load i2c-dev for ddcutil
+modprobe i2c-dev
+#export Enviroment variables
 export LC_ALL=en_US.utf8
 export QT_QPA_EGLFS_PHYSICAL_WIDTH=155
 export QT_QPA_EGLFS_PHYSICAL_HEIGHT=86
-export QT_QPA_EGLFS_HIDECURSOR=1
+export QT_QPA_EGLFS_HIDECURSOR=0
 export QT_QPA_EGLFS_ALWAYS_SET_MODE=1
 export QT_QPA_EGLFS_KMS_ATOMIC=1
 export QT_QPA_PLATFORM=eglfs
 
 /home/pi/powertune-update.sh ||:
 
-(cd /opt/PowerTune; ./Powertune) &
+/home/pi/startdaemon.sh &
 
-# Allow QT5 have more IOPS to load all lib/plugins while starting in background
-sleep 1.5
+(cd /opt/PowerTune; ./PowertuneQMLGui) &
 
-/home/pi/startdaemon.sh
-
-# Wait a bit before processing next init script
-sleep 1
 EOF
     chmod 0755 ${D}${sysconfdir}/init.d/powertune
     ln -s ../init.d/powertune ${D}${sysconfdir}/rc3.d/S010powertune

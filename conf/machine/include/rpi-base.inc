@@ -39,6 +39,7 @@ RPI_KERNEL_DEVICETREE_OVERLAYS ?= " \
     overlays/iqaudio-dacplus.dtbo \
     overlays/mcp2515-can0.dtbo \
     overlays/mcp2515-can1.dtbo \
+    overlays/mcp3008.dtbo \
     overlays/miniuart-bt.dtbo \
     overlays/pitft22.dtbo \
     overlays/pitft28-capacitive.dtbo \
@@ -57,6 +58,10 @@ RPI_KERNEL_DEVICETREE_OVERLAYS ?= " \
     overlays/wm8960-soundcard.dtbo \
     "
 
+RPI_KERNEL_DEVICETREE_OVERLAYS:append:raspberrypi5 = " \
+    overlays/vc4-kms-v3d-pi5.dtbo \
+"
+
 RPI_KERNEL_DEVICETREE ?= " \
     bcm2708-rpi-zero.dtb \
     bcm2708-rpi-zero-w.dtb \
@@ -72,6 +77,7 @@ RPI_KERNEL_DEVICETREE ?= " \
     bcm2708-rpi-cm.dtb \
     bcm2710-rpi-cm3.dtb \
     bcm2711-rpi-cm4.dtb \
+    bcm2711-rpi-cm4s.dtb \
     "
 
 KERNEL_DEVICETREE ??= " \
@@ -140,6 +146,7 @@ IMAGE_BOOT_FILES ?= "${BOOTFILES_DIR_NAME}/* \
                     '${KERNEL_IMAGETYPE};${SDIMG_KERNELIMAGE}', d)} \
                  "
 do_image_wic[depends] += " \
+    virtual/kernel:do_deploy \
     rpi-bootfiles:do_deploy \
     ${@bb.utils.contains('RPI_USE_U_BOOT', '1', 'u-boot:do_deploy', '',d)} \
     "
